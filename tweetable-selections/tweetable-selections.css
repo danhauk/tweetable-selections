@@ -1,0 +1,119 @@
+/**
+ * Entrance animation
+ * Animate.css - http://daneden.me/animate
+ * Licensed under the MIT license - http://opensource.org/licenses/MIT
+ */
+@-webkit-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+            transform: translate3d(0, 100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+            transform: none;
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+            transform: translate3d(0, 100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+            transform: none;
+  }
+}
+
+/**
+ * Share menu styles
+ */
+#tweetable-selection {
+	color: #fff;
+	display: none;
+	left: 0;
+	position: absolute;
+	text-align: center;
+	top: 0;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-ms-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
+
+	-webkit-animation-duration: 0.1s;
+    animation-duration: 0.1s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+
+#tweetable-selection.menu-active {
+	display: block !important;
+
+	-webkit-animation-name: fadeInUp;
+	animation-name: fadeInUp;
+}
+
+#tweetable-selection .tweetable-selection--twitter {
+	background: #333 url(twitter-gray.png) no-repeat 15px center;
+	background-size: 16px;
+	border-radius: 3px;
+	color: #ccc;
+	font: 300 14px 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	padding: 8px 15px 8px 40px;
+	position: relative;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-ms-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
+	white-space: nowrap;
+}
+
+#tweetable-selection .tweetable-selection--twitter:hover {
+	background-color: #fff;
+	background-image: url(twitter-color.png);
+	-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+	-ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+	-o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+	color: #55acee;
+}
+
+#tweetable-selection .tweetable-selection--twitter:after {
+	content: '';
+	display: block;
+	position: absolute;
+	bottom: -4px;
+	left: 50%;
+	margin-left: -4px;
+	width: 8px;
+	height: 8px;
+	background: #333;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-ms-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
+}
+
+#tweetable-selection .tweetable-selection--twitter:hover:after {
+	background: #fff;
+	-webkit-box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
+	-ms-box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
+	-o-box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
+}
