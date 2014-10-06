@@ -12,6 +12,21 @@ function get_selection_text() {
     return text;
 }
 
+// check if highlighted text is inside the #tweetable-selection-content div
+function check_tweetable_content(selection) {
+    var tweetable_content = document.getElementById('tweetable-selection-content');
+    var is_tweetable_content = 0;
+
+    for ( var i=0; i < tweetable_content.childNodes.length; i++ ) {
+        var child_content = tweetable_content.childNodes[i].innerHTML;
+        if ( child_content && child_content.indexOf( selection )  > -1 ) {
+            is_tweetable_content++;
+        }
+    }
+
+    return is_tweetable_content;
+}
+
 // get coordinates of highlighted text
 function get_selection_coords() {
     var sel = document.selection, range, rect;
@@ -61,9 +76,10 @@ function get_selection_coords() {
 // show share div if highlighted text is not null
 function show_tweetable_selection_div() {
 	var selected_text = get_selection_text();
-	var d = document.getElementById( 'tweetable-selection' );
+	var is_tweetable_content = check_tweetable_content(selected_text);
+    var d = document.getElementById( 'tweetable-selection' );
 
-	if ( selected_text != '' ) {
+    if ( selected_text != '' && is_tweetable_content ) {
         var tweet_link = document.getElementById( 'tweetable-selection--twitter' );
         var text_quote = encodeURIComponent( '"' + selected_text + '"' );
 
@@ -108,7 +124,7 @@ function tweetable_selection_div_width() {
 
 // open sharing window
 function tweetable_selection_open_win(url) {
-	window.open(url,'tweetwindow','width=566,height=350,location=yes,directories=no,channelmode=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no');
+	window.open(url,'tweetwindow','width=566,height=450,location=yes,directories=no,channelmode=no,menubar=no,resizable=no,scrollbars=no,status=no,toolbar=no');
 	return false;
 }
 

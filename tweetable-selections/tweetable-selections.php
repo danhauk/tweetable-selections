@@ -50,7 +50,7 @@ else {
 // Wrap the_content in a special div to make only the_content sharable
 add_action( 'the_content', 'tweetable_selection_content_div' );
 function tweetable_selection_content_div( $content ) {
-	return '<div class="tweetable-selection-content">'.$content.'</div>';
+	return '<div id="tweetable-selection-content">'.$content.'</div>';
 }
 
 // Add twitter share button to DOM
