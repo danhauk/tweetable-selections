@@ -61,11 +61,11 @@ function tweetable_selection_share_div() {
 
 // Create the default tweet
 function tweetable_selections_create_tweet() {
-	if ( get_option( 'tweetable_selections_bitly' ) != '' ) {
+	if ( get_option( 'tweetable_selections_shortlink' ) == 'shortlink' ) {
+        $permalink = wp_get_shortlink();
+    } elseif ( get_option( 'tweetable_selections_shortlink' ) == 'bitly' ) {
         $results = bitly_v3_shorten( get_permalink(), 'bit.ly' );
         $permalink = $results['url'];
-    } else {
-        $permalink = get_permalink();
     }
 
 	$tweet_link = 'https://twitter.com/intent/tweet?url=' . urlencode($permalink);
@@ -97,55 +97,110 @@ function tweetable_selections_menus() {
 // THIS FUNCTION CREATES THE OPTIONS PAGE WITH ALL OPTIONS
 function tweetable_selections_options() {
 ?>
-        <div class="pea_admin_wrap">
-                <div class="pea_admin_top">
-                    <h1>Tweetable Selections</h1>
-                    <h2>This plugin makes it extremely easy for your readers to tweet bits of your content. By simply highlighting the text they want to tweet, they can compose a tweet that includes the highlighted text, link to the article, and your Twitter handle.</h2>
-                </div>
-        
-                <div class="pea_admin_main_wrap">
-  
-                    <form method="post" action="options.php" id="options">
-                    
-                    <?php wp_nonce_field( 'update-options '); ?>
-                    <?php settings_fields( 'tweetable-selections-group' ); ?>
-  
-                    <table class="form-table">
-                        <tr>
-                        	<th scope="row">
-                        		<label for="tweetable_selections_username"><?php _e( 'Twitter Username' ); ?></label>
-                        	</th>
-                        	<td>
-                        		@<input type="text" name="tweetable_selections_username" value="<?php echo get_option( 'tweetable_selections_username' ); ?>" />
-                        	</td>
-                        </tr>
-                        <tr>
-                        	<th scope="row">
-                        		<label for="tweetable_selections_hashtag"><?php _e( 'Default Hashtag' ); ?></label>
-                        	</th>
-                        	<td>
-                        		<input type="text" name="tweetable_selections_hashtag" class="regular-text" value="<?php echo get_option( 'tweetable_selections_hashtag' ); ?>" />
-                        		<p class="description"><?php _e( 'If you want a hashtag to be added to each tweet by default, add it here' ); ?></p>
-                        	</td>
-                        </tr>
-                        <tr>
-                        	<th scope="row">
-                        		<label for="tweetable_selections_bitly"><?php _e( 'Bitly Generic Access Token '); ?></label>
-                        	</th>
-                        	<td>
-                        		<input type="text" name="tweetable_selections_bitly" class="regular-text" value="<?php echo get_option( 'tweetable_selections_bitly' ); ?>" />
-                        	</td>
-                    </table>
+        <div class="tweetable_selections_admin_wrap">
+            <h1><?php _e( 'Tweetable Selections' ); ?></h1>
+            <p><?php _e( 'Configure the options below to customize the tweet by adding your username for attribution, a default hashtag, and selecting link style.' ); ?></p>
 
-                    <input type="hidden" name="action" value="update" />
-                    <input type="hidden" name="page_options" value="tweetable-selections-username" />
+            <form method="post" action="options.php" id="options">
+            
+            <?php wp_nonce_field( 'update-options '); ?>
+            <?php settings_fields( 'tweetable-selections-group' ); ?>
 
-                    <p class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes'); ?>" /></p>
+            <table class="form-table">
+                <tr>
+                    <th colspan="2"><hr></th>
+                </tr>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="tweetable_selections_username"><?php _e( 'Twitter username' ); ?></label>
+                    </th>
+                    <td>
+                        @<input type="text" name="tweetable_selections_username" value="<?php echo get_option( 'tweetable_selections_username' ); ?>" />
+                        <p class="description"><?php _e( 'Don\'t include "twitter.com" or "@", just the username' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="tweetable_selections_hashtag"><?php _e( 'Default hashtag' ); ?></label>
+                    </th>
+                    <td>
+                        #<input type="text" name="tweetable_selections_hashtag" value="<?php echo get_option( 'tweetable_selections_hashtag' ); ?>" />
+                        <p class="description"><?php _e( 'If you want a hashtag to be added to each tweet by default, add it here' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2"><hr></th>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="tweetable_selections_shortlink"><?php _e( 'Use the shortlink' ); ?></label>
+                    </th>
+                    <td>
+                        <input type="radio" name="tweetable_selections_shortlink" id="tweetable_selections_shortlink" value="shortlink" <?php if ( get_option( 'tweetable_selections_shortlink', 'shortlink' ) == 'shortlink' ) { echo 'checked'; } ?> />
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="tweetable_selections_enable_bitly"><?php _e( 'Enable Bitly integration' ); ?></label>
+                    </th>
+                    <td>
+                        <input type="radio" name="tweetable_selections_shortlink" id="tweetable_selections_enable_bitly" value="bitly" <?php if ( get_option( 'tweetable_selections_shortlink' ) == 'bitly' ) { echo 'checked'; } ?> />
+                    </td>
+                </tr>
+            </table>
 
-                    </form>
+            <?php 
+            if ( get_option( 'tweetable_selections_shortlink' ) == 'bitly' ) {
+                $tweetable_selections_bitlydisplay = 'block';
+            } else {
+                $tweetable_selections_bitlydisplay = 'none';
+            }
+            ?>
 
-                </div>
+            <div id="tweetable-selections-bitly-enabled" style="display:<?php echo $tweetable_selections_bitlydisplay; ?>">
+                <p><?php _e( 'To connect your bit.ly account you need an API key.' ); ?></p>
+                <p><strong><?php _e( 'Follow the steps below:' ); ?></strong></p>
+                <ol>
+                    <li><?php _e( 'Login to your Bitly account or signup at' ); ?> <a href="https://bitly.com">https://bitly.com</a></li>
+                    <li><?php _e( 'Go to the OAuth applications settings page at' ); ?> <a href="https://bitly.com/a/oauth_apps">https://bitly.com/a/oauth_apps</a></li>
+                    <li><?php _e( 'Confirm your password and click "Generate Token"' ); ?></li>
+                    <li><?php _e( 'Add your Generic Access Token below' ); ?></li>
+                </ol>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">
+                            <label for="tweetable_selections_bitly"><?php _e( 'Bitly Generic Access Token '); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" name="tweetable_selections_bitly" id="tweetable_selections_bitly" class="regular-text" value="<?php echo get_option( 'tweetable_selections_bitly' ); ?>" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
+            <input type="hidden" name="action" value="update" />
+            <input type="hidden" name="page_options" value="tweetable-selections-username" />
+
+            <p class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes'); ?>" /></p>
+
+            </form>
+
+            <script>
+            window.onload = function() {
+                var tweetable_selections_bitly_check = document.getElementById('tweetable_selections_enable_bitly');
+                var tweetable_selections_bitly_explain = document.getElementById('tweetable-selections-bitly-enabled');
+
+                tweetable_selections_bitly_check.addEventListener('click', function() {
+                    if ( tweetable_selections_bitly_explain.style.display != 'none') {
+                        tweetable_selections_bitly_explain.style.display = 'none';
+                    }
+                    else {
+                        tweetable_selections_bitly_explain.style.display = 'block';
+                    }
+                });
+            }
+            </script>
         </div>
 
 <?php
@@ -154,8 +209,8 @@ function tweetable_selections_options() {
 
 // THIS FUNCTION SAVES THE OPTIONS FROM THE PREVIOUS FUNCTION
 function tweetable_selections_process() { // whitelist options
-
   register_setting( 'tweetable-selections-group', 'tweetable_selections_username' );
   register_setting( 'tweetable-selections-group', 'tweetable_selections_hashtag' );
+  register_setting( 'tweetable-selections-group', 'tweetable_selections_shortlink' );
   register_setting( 'tweetable-selections-group', 'tweetable_selections_bitly' );
 }

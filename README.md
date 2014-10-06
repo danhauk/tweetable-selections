@@ -14,7 +14,8 @@ Just drag the `tweetable-selections` folder into your `wp-content/plugins` direc
 
 ## Left to do
 
-* Better explanation of where to get bit.ly Generic Access Token on settings menu
+* ~~Better explanation of where to get bit.ly Generic Access Token on settings menu~~
+* ~~Use shortlink instead of full URL~~
 * Truncate selected text with ellipsis if character count of tweet is > 140
 * Cross-browser testing and debugging
 * Make sure all the code looks good and quality
